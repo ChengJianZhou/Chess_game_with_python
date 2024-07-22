@@ -123,10 +123,16 @@ class Board:
         if self.promotion_pending:
             self.handle_promotion(row, col)
         elif self.selected_piece:
-            if (row, col) == self.selected_piece.position:
+            if (row, col) in self.valid_moves:
+                self.move_piece(row, col)
+            elif (row, col) == self.selected_piece.position:
                 self.cancel_selection()
             else:
-                self.move_piece(row, col)
+                piece = self.grid[row][col]
+                if piece and piece.color == self.current_turn:
+                    self.select_piece(row, col)
+                else:
+                    self.cancel_selection()
         else:
             self.select_piece(row, col)
 
